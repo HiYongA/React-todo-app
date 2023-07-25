@@ -1,7 +1,4 @@
-<aside>
-💡 react, redux, json-server, Thunk, react-query 실습을 통해 개발에 익숙해져 봅시다.
-
-</aside>
+# 💡 react, redux, json-server, Thunk, react-query 실습을 통해 개발에 익숙해지기
 
 ## Lv1
 
