@@ -1,7 +1,10 @@
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../redux/modules/todosSlice";
 
-const Form = ({ todos, setTodos }) => {
+const Form = () => {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
@@ -21,7 +24,7 @@ const Form = ({ todos, setTodos }) => {
       body,
       isDone: false,
     };
-    setTodos([...todos, newTodo]);
+    dispatch(addTodo(newTodo));
     setTitle("");
     setBody("");
   };

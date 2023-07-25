@@ -1,16 +1,18 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { removeTodo, switchTodo } from "../redux/modules/todosSlice";
+import { Link } from "react-router-dom";
 
-const List = ({ todos, setTodos, isDone }) => {
+const List = ({ isDone }) => {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos);
+
   const handleRemoveTodoBtnClick = (id) => {
-    const removeTodo = todos.filter((todo) => todo.id !== id);
-    setTodos(removeTodo);
+    dispatch(removeTodo(id));
   };
 
   const handleSwitchTodoBtnClick = (id) => {
-    const switchTodo = todos.map((todo) =>
-      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-    );
-    setTodos(switchTodo);
+    dispatch(switchTodo(id));
   };
 
   return (
@@ -28,6 +30,7 @@ const List = ({ todos, setTodos, isDone }) => {
                 margin: "10px",
               }}
             >
+              <Link to={`/${todo.id}`}>상세보기</Link>
               <p>{todo.id}</p>
               <h3>{todo.title}</h3>
               <p>{todo.body}</p>
