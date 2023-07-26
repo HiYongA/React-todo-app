@@ -1,24 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { removeTodo, switchTodo } from "../redux/modules/todosSlice";
+import {
+  __getTodos,
+  __removeTodo,
+  __switchTodo,
+} from "../redux/modules/todosSlice";
 import { Link } from "react-router-dom";
 
 const List = ({ isDone }) => {
   const dispatch = useDispatch();
-  const todos = useSelector((state) => state.todos);
+  const { isLoading, isError, data } = useSelector((state) => state.todos);
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      await dispatch(__getTodos());
+    };
+    fetchTodos();
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <h1>아직 로딩중이에요..!</h1>;
+  }
+
+  if (isError) {
+    return <h1>오류가 발생했어요!</h1>;
+  }
 
   const handleRemoveTodoBtnClick = (id) => {
-    dispatch(removeTodo(id));
+    dispatch(__removeTodo(id));
   };
 
   const handleSwitchTodoBtnClick = (id) => {
-    dispatch(switchTodo(id));
+    dispatch(__switchTodo(id));
   };
 
   return (
     <div>
       <h2>{isDone ? "Done" : "Todo"}</h2>
-      {todos
+      {data
         .filter((todo) => todo.isDone === isDone)
         .map((todo) => {
           return (

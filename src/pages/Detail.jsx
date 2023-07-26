@@ -5,8 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const todos = useSelector((state) => state.todos);
-  const todo = todos.find((todo) => todo.id === id);
+  const { data } = useSelector((state) => state.todos);
+  const todo = data.find((todo) => todo.id === id);
 
   return (
     <div
