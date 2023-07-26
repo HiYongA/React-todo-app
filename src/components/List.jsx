@@ -1,22 +1,23 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  __getTodos,
-  __removeTodo,
-  __switchTodo,
-} from "../redux/modules/todosSlice";
+import React from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getTodos, removeTodo, switchTodo } from "../api/todo";
 
 const List = ({ isDone }) => {
-  const dispatch = useDispatch();
-  const { isLoading, isError, data } = useSelector((state) => state.todos);
+  const { isLoading, isError, data } = useQuery("todos", getTodos);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      await dispatch(__getTodos());
-    };
-    fetchTodos();
-  }, [dispatch]);
+  const queryClient = useQueryClient();
+
+  const removeMutation = useMutation(removeTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
+  const switchMutation = useMutation(switchTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
 
   if (isLoading) {
     return <h1>아직 로딩중이에요..!</h1>;
@@ -27,11 +28,15 @@ const List = ({ isDone }) => {
   }
 
   const handleRemoveTodoBtnClick = (id) => {
-    dispatch(__removeTodo(id));
+    removeMutation.mutate(id);
   };
 
-  const handleSwitchTodoBtnClick = (id) => {
-    dispatch(__switchTodo(id));
+  const handleSwitchTodoBtnClick = (todo) => {
+    const updateTodo = {
+      ...todo,
+      isDone: !todo.isDone,
+    };
+    switchMutation.mutate(updateTodo);
   };
 
   return (
@@ -57,7 +62,7 @@ const List = ({ isDone }) => {
               <button onClick={() => handleRemoveTodoBtnClick(todo.id)}>
                 삭제
               </button>
-              <button onClick={() => handleSwitchTodoBtnClick(todo.id)}>
+              <button onClick={() => handleSwitchTodoBtnClick(todo)}>
                 {todo.isDone ? "취소" : "완료"}
               </button>
             </div>

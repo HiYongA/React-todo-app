@@ -1,11 +1,12 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { getTodos } from "../api/todo";
 
 const Detail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data } = useSelector((state) => state.todos);
+  const { data } = useQuery("todos", getTodos);
   const todo = data.find((todo) => todo.id === id);
 
   return (
@@ -17,9 +18,9 @@ const Detail = () => {
       }}
     >
       <button onClick={() => navigate("/")}>이전으로</button>
-      <p>{todo.id}</p>
-      <h3>{todo.title}</h3>
-      <p>{todo.body}</p>
+      <p>{todo?.id}</p>
+      <h3>{todo?.title}</h3>
+      <p>{todo?.body}</p>
     </div>
   );
 };

@@ -1,12 +1,18 @@
-import { nanoid } from "nanoid";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { __addTodo } from "../redux/modules/todosSlice";
+import { useMutation, useQueryClient } from "react-query";
+import { addTodo } from "../api/todo";
 
 const Form = () => {
-  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+
+  const queryClient = useQueryClient();
+
+  const addMutation = useMutation(addTodo, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("todos");
+    },
+  });
 
   const handleTitleBtnClick = (e) => {
     setTitle(e.target.value);
@@ -19,12 +25,11 @@ const Form = () => {
   const handleAddTodoSubmit = (e) => {
     e.preventDefault();
     const newTodo = {
-      id: nanoid(),
       title,
       body,
       isDone: false,
     };
-    dispatch(__addTodo(newTodo));
+    addMutation.mutate(newTodo);
     setTitle("");
     setBody("");
   };
