@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { addTodo } from "../api/todo";
+import useInput from "../api/useInput";
 
 const Form = () => {
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [title, handleTitleBtnClick, resetTitle] = useInput();
+  const [body, handleBodyBtnClick, resetBody] = useInput();
 
   const queryClient = useQueryClient();
 
@@ -14,14 +15,6 @@ const Form = () => {
     },
   });
 
-  const handleTitleBtnClick = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleBodyBtnClick = (e) => {
-    setBody(e.target.value);
-  };
-
   const handleAddTodoSubmit = (e) => {
     e.preventDefault();
     const newTodo = {
@@ -30,8 +23,8 @@ const Form = () => {
       isDone: false,
     };
     addMutation.mutate(newTodo);
-    setTitle("");
-    setBody("");
+    resetTitle("");
+    resetBody("");
   };
 
   return (

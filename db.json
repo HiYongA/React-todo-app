@@ -18,5 +18,11 @@
       "isDone": false,
       "id": "OQsgUis"
     }
+  ],
+  "nickname": [
+    {
+      "id": "dd1@test.com",
+      "nickName": "용아"
+    }
   ]
 }
