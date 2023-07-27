@@ -52,10 +52,6 @@ query
 
 - For the extra levels
   - useEffect
-    - counter 프로그램 필요
   - react-router-dom + useParams
-    - 전용 프로그램 필요
   - custom-hooks
-    - Level 4, 5에 각각 리팩토링
   - authentication
-    - Level 4, 5에 각각 리팩토링
